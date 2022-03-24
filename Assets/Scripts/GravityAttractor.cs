@@ -16,15 +16,15 @@ public class GravityAttractor : MonoBehaviour
             //other.GetComponent<GravityBody>().SetGravity(true);
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<GravityBody>())
-        {
-            print("exited gravity......");
-            other.GetComponent<GravityBody>().planet = new GravityAttractor();
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.GetComponent<GravityBody>())
+    //    {
+    //        print("exited gravity......");
+    //        other.GetComponent<GravityBody>().planet = new GravityAttractor();
 
-        }
-    }
+    //    }
+    //}
 
 
     public void Attract(Transform body)
@@ -38,5 +38,12 @@ public class GravityAttractor : MonoBehaviour
         body.rotation = Quaternion.FromToRotation(localUp, gravityUp) * body.rotation;
 
         Debug.DrawLine(body.position, transform.position, Color.red, 5f);
+    }
+
+    private void OnDrawGizmos()
+    {
+        float radius = transform.parent.localScale.x;
+        radius *= transform.localScale.x;
+        Gizmos.DrawWireSphere(transform.position, radius / 2f);
     }
 }

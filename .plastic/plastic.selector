@@ -1,0 +1,4 @@
+repository "jetpac3d@local"
+  path "/"
+    br "/main"
+    co "/main"

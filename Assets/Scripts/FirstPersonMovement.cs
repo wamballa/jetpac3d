@@ -8,7 +8,8 @@ public class FirstPersonMovement : MonoBehaviour
     public float mouseSensitivityX = 250;
     public float mouseSensitivityY = 250;
     public float walkSpeed = 6;
-    public float jumpForce = 220;
+    float jumpForce = 600;
+    Vector3 jumpDirection;
     public LayerMask groundedMask;
 
     // System vars
@@ -20,19 +21,27 @@ public class FirstPersonMovement : MonoBehaviour
     Rigidbody rigidBody;
     float multi = 1.6f;
 
+    bool canSeePlanet = false;
+    GameObject currentPlanet;
+
     void Awake()
     {
         //Screen.lockCursor = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        cameraTransform = Camera.main.transform;
+        //cameraTransform = Camera.main.transform;
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;
+
+        jumpDirection = transform.up;
     }
 
     private void Update()
     {
         LookRotation();
+        CheckIsGrounded();
+        CheckCanSeePlanet();
+
         // Calculate movement:
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
@@ -46,10 +55,69 @@ public class FirstPersonMovement : MonoBehaviour
         {
             if (isGrounded)
             {
-                rigidBody.AddForce(transform.up * jumpForce);
+                if (canSeePlanet)
+                {
+                    print("Jump towards planet");
+                    rigidBody.AddForce(cameraTransform.forward * jumpForce);
+
+                }
+                else
+                {
+                    print("Jump");
+                    rigidBody.AddForce(jumpDirection * jumpForce);
+                }
+
+                //rigidBody.AddForce((Vector3.left * verticalLookRotation) * jumpForce);
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        ApplyMovement();
+    }
+
+    void CheckCanSeePlanet()
+    {
+        if (cameraTransform)
+        {
+            // Grounded check
+            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward * 1000f);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 1000f, groundedMask))
+            {
+                if (hit.transform.gameObject != currentPlanet)
+                {
+                    //print("Player see planet " + hit.transform.name);
+                    canSeePlanet = true;
+                    //jumpDirection = cameraTransform.forward;
+                }
+                else
+                {
+                    //canSeePlanet = false;
+                    //jumpDirection = transform.up;
+                }
+
+            }
+            else
+            {
+                canSeePlanet = false;
+                jumpDirection = transform.up;
             }
         }
 
+    }
+
+    void ApplyMovement()
+    {
+        // Apply movement to rigidbody
+        Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
+        rigidBody.MovePosition(rigidBody.position + localMove);
+    }
+
+    void CheckIsGrounded()
+    {
         // Grounded check
 
         Ray ray = new Ray(transform.position, -transform.up * multi);
@@ -58,22 +126,16 @@ public class FirstPersonMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, multi, groundedMask))
         {
             isGrounded = true;
+            currentPlanet = hit.transform.gameObject;
             //Debug.DrawRay(transform.position, -transform.up * multi, Color.red, 5f);
             //print("Grounded ");
         }
         else
         {
             isGrounded = false;
+            currentPlanet = null;
         }
     }
-
-    void FixedUpdate()
-    {
-        // Apply movement to rigidbody
-        Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
-        rigidBody.MovePosition(rigidBody.position + localMove);
-    }
-
     private void LookRotation()
     {
         // Look rotation:
@@ -86,7 +148,9 @@ public class FirstPersonMovement : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.forward * 2);
+        Gizmos.DrawRay(cameraTransform.position, cameraTransform.forward * 1000f);
         Gizmos.DrawRay(transform.position, -transform.up * multi);
+        if (canSeePlanet) Gizmos.color = Color.green; else Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 2f);
     }
 }

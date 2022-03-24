@@ -39,4 +39,9 @@ public class GravityBody : MonoBehaviour
     {
         hasGravity = b;
     }
+
+    public GameObject GetPlanet()
+    {
+        return planet.gameObject.transform.parent.gameObject;
+    }
 }
