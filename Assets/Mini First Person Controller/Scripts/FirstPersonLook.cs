@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+
+using UnityEngine;
 
 public class FirstPersonLook : MonoBehaviour
 {
     [SerializeField]
-    Transform character;
+    Transform playerController;
     public float sensitivity = 2;
     public float smoothing = 1.5f;
 
@@ -14,7 +16,7 @@ public class FirstPersonLook : MonoBehaviour
     void Reset()
     {
         // Get the character from the FirstPersonMovement in parents.
-        character = GetComponentInParent<FirstPersonMovement>().transform;
+        playerController = GetComponentInParent<PlayerController>().transform;
     }
 
     void Start()
@@ -57,3 +59,5 @@ public class FirstPersonLook : MonoBehaviour
     }
 
 }
+
+*/
