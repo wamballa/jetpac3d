@@ -36,7 +36,7 @@ public class ShipHandler : MonoBehaviour
     public bool IsFuelCarried { get; private set; }
     public bool IsFuelLoaded { get; private set; }
     public bool IsReadyForTakeOff { get; private set; }
-    public bool IsPlayerStrappedIn { get; private set; }
+    public bool IsPlayerInShip { get; private set; }
 
     // internal
     private GameObject shipPart;
@@ -76,7 +76,10 @@ public class ShipHandler : MonoBehaviour
         // check is ship ready
         if (IsTopLoaded && IsMiddleLoaded) IsShipReady = true;
 
-        
+        // check if ship ready for takeoff
+        if (currentFuel == 3) IsReadyForTakeOff = true;
+
+
     }
     private void HandleUI()
     {
@@ -130,7 +133,7 @@ public class ShipHandler : MonoBehaviour
             if (currentFuel == 3)
             {
                 topUIImage.color = Color.magenta;
-                IsReadyForTakeOff = true;
+
             }
         }
 
@@ -224,7 +227,7 @@ public class ShipHandler : MonoBehaviour
         {
             if (IsReadyForTakeOff)
             {
-                IsPlayerStrappedIn = true;
+                IsPlayerInShip = true;
             }
         }
     }

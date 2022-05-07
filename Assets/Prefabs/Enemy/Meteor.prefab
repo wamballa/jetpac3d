@@ -12,16 +12,16 @@ GameObject:
   - component: {fileID: 7178744585938762160}
   - component: {fileID: 7178744585938762161}
   - component: {fileID: 7178744585938762162}
-  - component: {fileID: 7178744585938762164}
   - component: {fileID: 7178744585938762165}
   - component: {fileID: 7178744585938762166}
   - component: {fileID: 7178744585938762123}
   - component: {fileID: 7178744585938762122}
   - component: {fileID: 7178744585938762121}
   - component: {fileID: 7178744585938762127}
-  - component: {fileID: 7178744585938762120}
+  - component: {fileID: 1805895337588334142}
+  - component: {fileID: 6739612708536739770}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Meteor
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,20 +107,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3.5
   m_Center: {x: 0.02777791, y: 0.0663085, z: -0.82885206}
---- !u!114 &7178744585938762164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7178744585938762163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ffb8f9eddf7e334d9fa3b3b27d796bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 10
-  CriticalHealthRatio: 0.3
 --- !u!114 &7178744585938762165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +114,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7178744585938762163}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bec8269a2ab049948b8f9bd1875e8e1d, type: 3}
   m_Name: 
@@ -142,7 +128,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7178744585938762163}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 640e090412fd7664b9eb020cbd5c6bde, type: 3}
   m_Name: 
@@ -207,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a53db1b88529ef42b36b11a7b61b435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: {fileID: 7178744585938762164}
+  Health: {fileID: 0}
   HealthBarImage: {fileID: 7178744586424995722}
   HealthBarPivot: {fileID: 7178744586173204636}
   HideFullHealthBar: 1
@@ -252,21 +238,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16a33b0425f5b4e92b68a06cfe65bc6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityAttractor: {fileID: 0}
---- !u!114 &7178744585938762120
+--- !u!114 &1805895337588334142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7178744585938762163}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f63025ae5ecfd2146acb636068ee0bfe, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c1f04791478f074cb581052834d369f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 10
-  direction: 1
+  MaxHealth: 10
+  CriticalHealthRatio: 0.3
+--- !u!54 &6739612708536739770
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7178744585938762163}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7178744586046996549
 GameObject:
   m_ObjectHideFlags: 0
