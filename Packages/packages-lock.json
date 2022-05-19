@@ -73,6 +73,7 @@
       },
       "url": "https://packages.unity.com"
     },
+<<<<<<< HEAD
     "com.unity.probuilder": {
       "version": "5.0.4",
       "depth": 0,
@@ -112,6 +113,8 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+=======
+>>>>>>> e735c119b74511577e606838a9f44bfc5352d066
     "com.unity.services.core": {
       "version": "1.0.1",
       "depth": 1,
@@ -121,6 +124,7 @@
       },
       "url": "https://packages.unity.com"
     },
+<<<<<<< HEAD
     "com.unity.settings-manager": {
       "version": "1.0.3",
       "depth": 1,
@@ -137,6 +141,8 @@
         "com.unity.searcher": "4.9.1"
       }
     },
+=======
+>>>>>>> e735c119b74511577e606838a9f44bfc5352d066
     "com.unity.test-framework": {
       "version": "1.1.31",
       "depth": 0,
