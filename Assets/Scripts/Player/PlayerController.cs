@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     float verticalLookRotation;
     public Transform cameraTransform;
     Rigidbody rigidBody;
-    float multi = 0.95f;
+    float multi = 1.1f;
 
     Health m_Health;
     PlayerWeaponsManager m_WeaponsManager;

@@ -39,25 +39,30 @@ public class FillBarColorChange : MonoBehaviour
         EmptyValue = emptyValueRatio;
 
         m_PreviousValue = fullValueRatio;
+
+
     }
 
     public void UpdateVisual(float currentRatio)
     {
-        if (currentRatio == FullValue && currentRatio != m_PreviousValue)
-        {
-            ForegroundImage.color = FlashForegroundColorFull;
-        }
-        else if (currentRatio < EmptyValue)
-        {
-            BackgroundImage.color = FlashBackgroundColorEmpty;
-        }
-        else
-        {
-            ForegroundImage.color = Color.Lerp(ForegroundImage.color, DefaultForegroundColor,
-                Time.deltaTime * ColorChangeSharpness);
-            BackgroundImage.color = Color.Lerp(BackgroundImage.color, DefaultBackgroundColor,
-                Time.deltaTime * ColorChangeSharpness);
-        }
+
+        //print("full bar color change " + currentRatio);
+
+        //if (currentRatio == FullValue && currentRatio != m_PreviousValue)
+        //{
+        //    ForegroundImage.color = FlashForegroundColorFull;
+        //}
+        //else if (currentRatio < EmptyValue)
+        //{
+        //    BackgroundImage.color = FlashBackgroundColorEmpty;
+        //}
+        //else
+        //{
+        //    ForegroundImage.color = Color.Lerp(ForegroundImage.color, DefaultForegroundColor,
+        //        Time.deltaTime * ColorChangeSharpness);
+        //    BackgroundImage.color = Color.Lerp(BackgroundImage.color, DefaultBackgroundColor,
+        //        Time.deltaTime * ColorChangeSharpness);
+        //}
 
         m_PreviousValue = currentRatio;
     }

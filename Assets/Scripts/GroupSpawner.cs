@@ -7,7 +7,7 @@ public class GroupSpawner : MonoBehaviour
     [Header("What to spawn")]
     public GameObject spawnItem;
 
-    [Header("Where to spawn from")]
+    [Header("Where to spawn from. If empty will use RANDOM SPHERE")]
     public Transform[] spawnPoints;
 
     [Header("Max number of objects to ever spawn")]
@@ -35,6 +35,8 @@ public class GroupSpawner : MonoBehaviour
 
     float uiTimer;
     float uiDelay =3f;
+
+    bool hasADisplayMessage;
     bool hasDisplayedMessage;
 
     private void Start()
@@ -47,6 +49,7 @@ public class GroupSpawner : MonoBehaviour
                 gchild.GetComponent<MeshRenderer>().enabled = false;
             }
         }
+        if (uiObject != null) hasADisplayMessage = true;
     }
 
 
@@ -55,21 +58,27 @@ public class GroupSpawner : MonoBehaviour
     {
         if (!isEnabled) return;
 
-        // switch on message
-        if (!hasDisplayedMessage)
+        if (hasADisplayMessage)
         {
-            // handle ui timer
-            uiObject.SetActive(true);
-            uiTimer = Time.time + uiDelay;
-            hasDisplayedMessage = true;
-        }
+            // switch on message
+            if (!hasDisplayedMessage)
+            {
+                // handle ui timer
+                uiObject.SetActive(true);
+                uiTimer = Time.time + uiDelay;
+                hasDisplayedMessage = true;
+            }
 
-        // switch off ui message and start spawning
-        if (Time.time > uiTimer)
-        {
-            uiObject.SetActive(false);
-            CanSpawn = true;
+            // switch off ui message and start spawning
+            if (Time.time > uiTimer)
+            {
+                uiObject.SetActive(false);
+                CanSpawn = true;
+            }
         }
+        else CanSpawn = true;
+
+
 
         if (CanSpawn)
         if (Time.time > spawnTimer)
@@ -83,7 +92,7 @@ public class GroupSpawner : MonoBehaviour
                         spawnItem,
                         spawnPoints[randomSpawnPoint].position,
                         spawnPoints[randomSpawnPoint].localRotation);
-                    spawn.GetComponent<Rigidbody>().freezeRotation = true;
+                    //spawn.GetComponent<Rigidbody>().freezeRotation = true;
                     ResetTimer();
                 }
         }

@@ -441,6 +441,7 @@ public class PlayerWeaponsManager : MonoBehaviour
             if (m_WeaponSlots[i] == null)
             {
                 // spawn the weapon prefab as child of the weapon socket
+                //print(">>>" + WeaponParentSocket.name);
                 WeaponController weaponInstance = Instantiate(weaponPrefab, WeaponParentSocket);
                 weaponInstance.transform.localPosition = Vector3.zero;
                 weaponInstance.transform.localRotation = Quaternion.identity;

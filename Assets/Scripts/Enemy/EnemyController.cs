@@ -67,6 +67,11 @@ public class EnemyController : MonoBehaviour
     [Header("Sounds")]
     [Tooltip("Sound played when recieving damages")]
     public AudioClip DamageTick;
+    public AudioClip explosionSFX;
+    public AudioSource[] explosionSources;
+
+    [Header("Audio source")]
+    public AudioSource audioSource;
 
     [Header("VFX")]
     [Tooltip("The VFX prefab spawned when the enemy dies")]
@@ -154,76 +159,35 @@ public class EnemyController : MonoBehaviour
 
         m_Health.OnDamaged += OnDamaged;
 
-        //// Find and initialize all weapons
-        //FindAndInitializeAllWeapons();
-        //var weapon = GetCurrentWeapon();
-        //weapon.ShowWeapon(true);
 
-        //var detectionModules = GetComponentsInChildren<DetectionModule>();
-        //DebugUtility.HandleErrorIfNoComponentFound<DetectionModule, EnemyController>(detectionModules.Length, this,
-        //    gameObject);
-        //DebugUtility.HandleWarningIfDuplicateObjects<DetectionModule, EnemyController>(detectionModules.Length,
-        //    this, gameObject);
-        //// Initialize detection module
-        //DetectionModule = detectionModules[0];
-        //DetectionModule.onDetectedTarget += OnDetectedTarget;
-        //DetectionModule.onLostTarget += OnLostTarget;
-        //onAttack += DetectionModule.OnAttack;
-
-        //var navigationModules = GetComponentsInChildren<NavigationModule>();
-        //DebugUtility.HandleWarningIfDuplicateObjects<DetectionModule, EnemyController>(detectionModules.Length,
-        //    this, gameObject);
-        //// Override navmesh agent data
-        //if (navigationModules.Length > 0)
-        //{
-        //    m_NavigationModule = navigationModules[0];
-        //    NavMeshAgent.speed = m_NavigationModule.MoveSpeed;
-        //    NavMeshAgent.angularSpeed = m_NavigationModule.AngularSpeed;
-        //    NavMeshAgent.acceleration = m_NavigationModule.Acceleration;
-        //}
-
-        //foreach (var renderer in GetComponentsInChildren<Renderer>(true))
-        //{
-        //    for (int i = 0; i < renderer.sharedMaterials.Length; i++)
-        //    {
-        //        if (renderer.sharedMaterials[i] == EyeColorMaterial)
-        //        {
-        //            m_EyeRendererData = new RendererIndexData(renderer, i);
-        //        }
-
-        //        if (renderer.sharedMaterials[i] == BodyMaterial)
-        //        {
-        //            m_BodyRenderers.Add(new RendererIndexData(renderer, i));
-        //        }
-        //    }
-        //}
-
-        //m_BodyFlashMaterialPropertyBlock = new MaterialPropertyBlock();
-
-        //// Check if we have an eye renderer for this enemy
-        //if (m_EyeRendererData.Renderer != null)
-        //{
-        //    m_EyeColorMaterialPropertyBlock = new MaterialPropertyBlock();
-        //    m_EyeColorMaterialPropertyBlock.SetColor("_EmissionColor", DefaultEyeColor);
-        //    m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock,
-        //        m_EyeRendererData.MaterialIndex);
-        //}
     }
 
     void Update()
     {
         EnsureIsWithinLevelBounds();
 
-        //DetectionModule.HandleTargetDetection(m_Actor, m_SelfColliders);
-
-        //Color currentColor = OnHitBodyGradient.Evaluate((Time.time - m_LastTimeDamaged) / FlashOnHitDuration);
-        //m_BodyFlashMaterialPropertyBlock.SetColor("_EmissionColor", currentColor);
-        //foreach (var data in m_BodyRenderers)
-        //{
-        //    data.Renderer.SetPropertyBlock(m_BodyFlashMaterialPropertyBlock, data.MaterialIndex);
-        //}
-
         m_WasDamagedThisFrame = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ground"))
+        {
+            //print("hit ground");
+
+            OnDie();
+
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Ground"))
+        {
+            print("hit ground with OnCOllissionEnter");
+
+            OnDie();
+        }
     }
 
     void EnsureIsWithinLevelBounds()
@@ -235,118 +199,6 @@ public class EnemyController : MonoBehaviour
             return;
         }
     }
-
-    //void OnLostTarget()
-    //{
-    //    onLostTarget.Invoke();
-
-    //    // Set the eye attack color and property block if the eye renderer is set
-    //    if (m_EyeRendererData.Renderer != null)
-    //    {
-    //        m_EyeColorMaterialPropertyBlock.SetColor("_EmissionColor", DefaultEyeColor);
-    //        m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock,
-    //            m_EyeRendererData.MaterialIndex);
-    //    }
-    //}
-
-    //void OnDetectedTarget()
-    //{
-    //    onDetectedTarget.Invoke();
-
-    //    // Set the eye default color and property block if the eye renderer is set
-    //    if (m_EyeRendererData.Renderer != null)
-    //    {
-    //        m_EyeColorMaterialPropertyBlock.SetColor("_EmissionColor", AttackEyeColor);
-    //        m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock,
-    //            m_EyeRendererData.MaterialIndex);
-    //    }
-    //}
-
-    //public void OrientTowards(Vector3 lookPosition)
-    //{
-    //    Vector3 lookDirection = Vector3.ProjectOnPlane(lookPosition - transform.position, Vector3.up).normalized;
-    //    if (lookDirection.sqrMagnitude != 0f)
-    //    {
-    //        Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-    //        transform.rotation =
-    //            Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * OrientationSpeed);
-    //    }
-    //}
-
-    //bool IsPathValid()
-    //{
-    //    return PatrolPath && PatrolPath.PathNodes.Count > 0;
-    //}
-
-    //public void ResetPathDestination()
-    //{
-    //    m_PathDestinationNodeIndex = 0;
-    //}
-
-    //public void SetPathDestinationToClosestNode()
-    //{
-    //    if (IsPathValid())
-    //    {
-    //        int closestPathNodeIndex = 0;
-    //        for (int i = 0; i < PatrolPath.PathNodes.Count; i++)
-    //        {
-    //            float distanceToPathNode = PatrolPath.GetDistanceToNode(transform.position, i);
-    //            if (distanceToPathNode < PatrolPath.GetDistanceToNode(transform.position, closestPathNodeIndex))
-    //            {
-    //                closestPathNodeIndex = i;
-    //            }
-    //        }
-
-    //        m_PathDestinationNodeIndex = closestPathNodeIndex;
-    //    }
-    //    else
-    //    {
-    //        m_PathDestinationNodeIndex = 0;
-    //    }
-    //}
-
-    //public Vector3 GetDestinationOnPath()
-    //{
-    //    if (IsPathValid())
-    //    {
-    //        return PatrolPath.GetPositionOfPathNode(m_PathDestinationNodeIndex);
-    //    }
-    //    else
-    //    {
-    //        return transform.position;
-    //    }
-    //}
-
-    //public void SetNavDestination(Vector3 destination)
-    //{
-    //    if (NavMeshAgent)
-    //    {
-    //        NavMeshAgent.SetDestination(destination);
-    //    }
-    //}
-
-    //public void UpdatePathDestination(bool inverseOrder = false)
-    //{
-    //    if (IsPathValid())
-    //    {
-    //        // Check if reached the path destination
-    //        if ((transform.position - GetDestinationOnPath()).magnitude <= PathReachingRadius)
-    //        {
-    //            // increment path destination index
-    //            m_PathDestinationNodeIndex =
-    //                inverseOrder ? (m_PathDestinationNodeIndex - 1) : (m_PathDestinationNodeIndex + 1);
-    //            if (m_PathDestinationNodeIndex < 0)
-    //            {
-    //                m_PathDestinationNodeIndex += PatrolPath.PathNodes.Count;
-    //            }
-
-    //            if (m_PathDestinationNodeIndex >= PatrolPath.PathNodes.Count)
-    //            {
-    //                m_PathDestinationNodeIndex -= PatrolPath.PathNodes.Count;
-    //            }
-    //        }
-    //    }
-    //}
 
     void OnDamaged(float damage, GameObject damageSource)
     {
@@ -369,8 +221,32 @@ public class EnemyController : MonoBehaviour
 
     void OnDie()
     {
+        //if (explosionSFX)
+        //{
+        //    // play sound
+        //    AudioUtility.CreateSFX(
+        //        explosionSFX,
+        //        transform.position,
+        //        AudioUtility.AudioGroups.Impact,
+        //        0f);
+        //}
+
+
         // spawn a particle system when dying
         var vfx = Instantiate(DeathVfx, DeathVfxSpawnPoint.position, Quaternion.identity);
+
+        //AudioUtility.CreateSFX(explosionSFX, transform.position, AudioUtility.AudioGroups.DamageTick, 0f);
+
+        //print(audioSource.name );
+        //audioSource.PlayOneShot(explosionSFX, 0.6f);
+
+        //explosionSources[Random.Range(0, explosionSources.Length - 1)].Play();
+
+        //AudioUtility.CreateSFX(explosionSFX, transform.position, AudioUtility.AudioGroups.DamageTick, 0f);
+
+        //AudioUtility.CreateSFX(explosionSFX, transform.position, AudioUtility.AudioGroups.EnemyAttack, 0f);
+
+
         Destroy(vfx, 5f);
 
         // tells the game flow manager to handle the enemy destuction
@@ -381,6 +257,8 @@ public class EnemyController : MonoBehaviour
         {
             Instantiate(LootPrefab, transform.position, Quaternion.identity);
         }
+
+
 
         // this will call the OnDestroy function
         Destroy(gameObject, DeathDuration);

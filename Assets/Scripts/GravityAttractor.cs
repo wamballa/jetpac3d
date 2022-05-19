@@ -38,6 +38,7 @@ public class GravityAttractor : MonoBehaviour
     {
         float radius = transform.parent.localScale.x;
         radius *= transform.localScale.x;
-        Gizmos.DrawWireSphere(transform.position, radius / 2f);
+        //Gizmos.color = Color.white;
+        //Gizmos.DrawWireSphere(transform.position, radius / 2f);
     }
 }

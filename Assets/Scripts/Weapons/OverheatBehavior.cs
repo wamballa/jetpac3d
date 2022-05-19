@@ -72,7 +72,12 @@ namespace Unity.FPS.Gameplay
 
             m_AudioSource = gameObject.AddComponent<AudioSource>();
             m_AudioSource.clip = CoolingCellsSound;
-            m_AudioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.WeaponOverheat);
+
+            m_AudioSource.Play();
+
+
+            //m_AudioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.WeaponOverheat);
+            //print(">>>> " + m_AudioSource.outputAudioMixerGroup);
         }
 
         void Update()

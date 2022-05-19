@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("THis is the fuel spawner")]
-    public GroupSpawner fuelSpawner;
+    public SpawnerOnSphere fuelSpawner;
 
     private ShipHandler shipHandler;
     public bool IsShipReady { get; set; }
@@ -23,15 +23,19 @@ public class GameManager : MonoBehaviour
     {
         if (shipHandler.IsShipReady && !IsShipReady && !shipHandler.IsReadyForTakeOff)
         {
-            print("Ship ready to load");
+            //print("Ship ready to load");
             IsShipReady = true;
             fuelSpawner.isEnabled = true;
         }
         if (shipHandler.IsReadyForTakeOff)
         {
-            print("Ship ready for take off");
+            //print("Ship ready for take off");
             fuelSpawner.isEnabled = false;
         }
-
+        if (shipHandler.IsPlayerInShip)
+        {
+            print("Player in ship");
+            //fuelSpawner.isEnabled = false;
+        }
     }
 }

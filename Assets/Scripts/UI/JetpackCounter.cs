@@ -20,17 +20,20 @@ public class JetpackCounter : MonoBehaviour
     void Awake()
     {
         m_Jetpack = FindObjectOfType<Jetpack>();
+        m_Jetpack.test();
         DebugUtility.HandleErrorIfNullFindObject<Jetpack, JetpackCounter>(m_Jetpack, this);
 
-        FillBarColorChange.Initialize(1f, 0f);
+
     }
 
     void Update()
     {
-        MainCanvasGroup.gameObject.SetActive(m_Jetpack.IsJetpackUnlocked);
+        //MainCanvasGroup.gameObject.SetActive(m_Jetpack.IsJetpackUnlocked);
+        MainCanvasGroup.gameObject.SetActive(true);
 
-        if (m_Jetpack.IsJetpackUnlocked)
+        if (true)
         {
+
             JetpackFillImage.fillAmount = m_Jetpack.CurrentFillRatio;
             FillBarColorChange.UpdateVisual(m_Jetpack.CurrentFillRatio);
         }

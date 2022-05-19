@@ -52,7 +52,7 @@ public class Jetpack : MonoBehaviour
 
     // stored ratio for jetpack resource (1 is full, 0 is empty)
     public float CurrentFillRatio { get; private set; }
-    public bool IsJetpackUnlocked { get;  set; }
+    public bool IsJetpackUnlocked { get; set; }
 
     //public bool IsPlayergrounded() => m_PlayerCharacterController.IsGrounded;
     public bool IsPlayergrounded() => playerController.IsGrounded;
@@ -118,7 +118,7 @@ public class Jetpack : MonoBehaviour
             rb.AddForce(thrustDirection, ForceMode.Force);
 
             Debug.DrawRay(transform.position, thrustDirection * 10, Color.red, 1f);
-            print("vel " + rb.velocity);
+            //print("vel " + rb.velocity);
 
             // consume fuel
             CurrentFillRatio = CurrentFillRatio - (Time.deltaTime / ConsumeDuration);
@@ -158,5 +158,9 @@ public class Jetpack : MonoBehaviour
 
 
         }
+    }
+    public void test()
+    {
+        print("this tests");
     }
 }

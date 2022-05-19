@@ -43,6 +43,7 @@ public class AudioUtility
             s_AudioManager = GameObject.FindObjectOfType<AudioManager>();
 
         var groups = s_AudioManager.FindMatchingGroups(group.ToString());
+        Debug.Log("Group " + group.ToString());
 
         if (groups.Length > 0)
             return groups[0];

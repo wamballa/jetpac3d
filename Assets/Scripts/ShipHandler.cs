@@ -12,7 +12,7 @@ public class ShipHandler : MonoBehaviour
     public GameObject middleShipUI;
     public GameObject topShipUI;
 
-    [Header("Ship parts")]
+    [Header("Ship parts UI")]
     public GameObject middleShipInPlaceUI;
     public GameObject topShipInPlaceUI;
 
@@ -26,6 +26,16 @@ public class ShipHandler : MonoBehaviour
     [Header("UI Header text change for final takeoff")]
     public GameObject buildShipText;
     public GameObject enterShipText;
+    public GameObject takeOffText;
+
+    [Header("Beacons for ship parts")]
+    public GameObject bottomBeacon;
+    public GameObject middleBeacon;
+    public GameObject topBeacon;
+
+    [Header("Ship part meshes so they can be hidden while carrying")]
+    public GameObject middleMesh;
+    public GameObject topMesh;
 
 
     public bool IsMiddleCarried { get; private set; }
@@ -46,41 +56,59 @@ public class ShipHandler : MonoBehaviour
     private void Start()
     {
         IsShipReady = false;
+
+        BeaconSwitch(bottomBeacon, true, false);
+        BeaconSwitch(middleBeacon, true, true);
+        BeaconSwitch(topBeacon, false, false);
     }
     void Update()
     {
         HandleUI();
 
-        if (IsMiddleCarried)
+        if (IsMiddleCarried && shipPart != null)
         {
-            if (shipPart != null)
-            {
-                //Vector3 shipPos = shipPart.GetComponent<Transform>().position;
-                shipPart.GetComponent<Transform>().position = transform.position;
-                shipPart.GetComponent<BoxCollider>().enabled = false;
-            }
+            //Vector3 shipPos = shipPart.GetComponent<Transform>().position;
+            shipPart.GetComponent<Transform>().position = transform.position;
+            shipPart.GetComponent<BoxCollider>().enabled = false;
+            middleMesh.transform.gameObject.SetActive(false);
+            //topMesh.transform.gameObject.SetActive(true);
         }
         if (IsTopCarried && shipPart != null)
         {
             //Vector3 shipPos = shipPart.GetComponent<Transform>().position;
             shipPart.GetComponent<Transform>().position = transform.position;
             shipPart.GetComponent<BoxCollider>().enabled = false;
+            topMesh.transform.gameObject.SetActive(false);
         }
         if (IsFuelCarried && shipPart != null)
         {
             //Vector3 shipPos = shipPart.GetComponent<Transform>().position;
+            middleMesh.transform.gameObject.SetActive(true);
+            topMesh.transform.gameObject.SetActive(true);
             shipPart.GetComponent<Transform>().position = transform.position;
             shipPart.GetComponent<BoxCollider>().enabled = false;
         }
 
+        if (IsMiddleLoaded) middleMesh.transform.gameObject.SetActive(true);
+
+        if (IsTopLoaded) topMesh.transform.gameObject.SetActive(true);
+
         // check is ship ready
-        if (IsTopLoaded && IsMiddleLoaded) IsShipReady = true;
+        if (IsTopLoaded && IsMiddleLoaded)
+        {
+            IsShipReady = true;
+        }
 
         // check if ship ready for takeoff
         if (currentFuel == 3) IsReadyForTakeOff = true;
 
-
     }
+
+    private void BeaconSwitch(GameObject beacon, bool isOn, bool isFlashing)
+    {
+        beacon.SetActive(isOn);
+    }
+
     private void HandleUI()
     {
         if (!IsShipReady)
@@ -92,9 +120,12 @@ public class ShipHandler : MonoBehaviour
             {
                 middleShipUI.SetActive(true);
 
+                Destroy(middleBeacon);
+
             }
             else if (IsTopCarried)
             {
+                Destroy(topBeacon);
                 topShipUI.SetActive(true);
             }
             else
@@ -104,6 +135,7 @@ public class ShipHandler : MonoBehaviour
             }
             if (IsMiddleLoaded)
             {
+                if (topBeacon != null) BeaconSwitch(topBeacon, true, true);
                 middleShipInPlaceUI.SetActive(true);
             }
             if (IsTopLoaded)
@@ -142,7 +174,14 @@ public class ShipHandler : MonoBehaviour
             fuelUI.SetActive(false);
             buildShipText.SetActive(false);
             enterShipText.SetActive(true);
+        }
 
+        if (IsPlayerInShip)
+        {
+            fuelUI.SetActive(false);
+            buildShipText.SetActive(false);
+            enterShipText.SetActive(false);
+            takeOffText.SetActive(true);
         }
 
     }
@@ -153,14 +192,23 @@ public class ShipHandler : MonoBehaviour
         // Load with middle
         if (collision.transform.name == "Bottom" && IsMiddleCarried)
         {
+            // make middle visible
+            middleMesh.gameObject.SetActive(false);
+
             // calculate where to position new part
             GameObject shipBottom = collision.gameObject;
             Vector3 shipBottomPos = shipBottom.transform.position;
             float shipBottomScaleY = shipBottom.transform.localScale.y;
-            float middlePosY = shipBottomPos.y + shipBottomScaleY;
-            Vector3 newPos = new Vector3(shipBottomPos.x, middlePosY, shipBottomPos.z);
+            //float middlePosY = shipBottomPos.y + shipBottomScaleY;
+            //Vector3 newPos = new Vector3(shipBottomPos.x, middlePosY, shipBottomPos.z);
+
+            Vector3 newPos = shipBottomPos + (shipBottom.transform.up * shipBottomScaleY);
 
             shipPart.transform.position = newPos;
+
+            // orient
+            shipPart.transform.rotation = shipBottom.transform.rotation;
+
             IsMiddleCarried = false;
             IsMiddleLoaded = true;
 
@@ -173,7 +221,12 @@ public class ShipHandler : MonoBehaviour
             Vector3 shipBottomPos = shipBottom.transform.position;
             float shipBottomScaleY = shipBottom.transform.localScale.y * 2;
             float newPosY = shipBottomPos.y + shipBottomScaleY;
-            Vector3 newPos = new Vector3(shipBottomPos.x, newPosY, shipBottomPos.z);
+            //Vector3 newPos = new Vector3(shipBottomPos.x, newPosY, shipBottomPos.z);
+
+            Vector3 newPos = shipBottomPos + (shipBottom.transform.up * shipBottomScaleY);
+
+            // orient
+            shipPart.transform.rotation = shipBottom.transform.rotation;
 
             shipPart.transform.position = newPos;
             IsMiddleCarried = false;
@@ -220,6 +273,8 @@ public class ShipHandler : MonoBehaviour
                 print("picked up fuel");
                 shipPart = collision.gameObject;
                 IsFuelCarried = true;
+                // disable beacon
+                shipPart.GetComponent<PickupHandler>().DestroyBeacon();
             }
         }
         // Get in ship

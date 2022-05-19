@@ -84,7 +84,11 @@ using UnityEngine.SceneManagement;
                 var audioSource = gameObject.AddComponent<AudioSource>();
                 audioSource.clip = VictorySound;
                 audioSource.playOnAwake = false;
-                audioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.HUDVictory);
+
+
+                //audioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.HUDVictory);
+
+
                 audioSource.PlayScheduled(AudioSettings.dspTime + DelayBeforeWinMessage);
 
                 // create a game message
